@@ -1,0 +1,465 @@
+:root {
+    /* === Backgrounds & Surfaces === */
+    --bg: #f4f6f8;
+    --card: #ffffff;
+    --overlay: rgba(0, 0, 0, 0.4);
+
+    /* === Text === */
+    --text: #0f172a;
+    --text-muted: #6b7280;
+
+    /* === Greens (success / positive) === */
+    --green: #22c55e;
+    --green-hover: #16a34a;
+
+    /* === Reds (danger / miss) === */
+    --red: #e11d48;
+    --red-hover: #be123c;
+
+    /* === Blues (accent / info) === */
+    --accent: #2563eb;
+    --blue: #3498db;
+    --accent-hover: #90adec;
+    --blue-hover: #2980b9;
+
+    /* === Purples (secondary / add button) === */
+    --purple: #6366f1;
+    --drk_prp: #5b10b0;
+    --purple-hover: #818cf8;
+
+    /* === Teals (neutral / calendar) === */
+    --teal: #0d9094;
+    --teal-hover: #2e97c8;
+
+    /* === Outlines / shadows === */
+    --border: #0000001a;
+    --border-strong: #00000026;
+    --shadow: #0f172a0f;
+}
+
+/* 🌙 Dark Theme */
+[data-theme="dark"] {
+    /* === Backgrounds & Surfaces === */
+    --bg: #0f172a;
+    --card: #1e293b;
+    --overlay: rgba(255, 255, 255, 0.08);
+
+    /* === Text === */
+    --text: #f1f5f9;
+    --text-muted: #94a3b8;
+
+    /* === Greens === */
+    --green: #22c55e;
+    --green-hover: #16a34a;
+
+    /* === Reds === */
+    --red: #f43f5e;
+    --red-hover: #e11d48;
+
+    /* === Blues === */
+    --blue: #3b82f6;
+    --blue-hover: #60a5fa;
+
+    /* === Purples === */
+    --purple: #8b5cf6;
+    --purple-hover: #a78bfa;
+
+    /* === Teals === */
+    --teal: #06b6d4;
+    --teal-hover: #22d3ee;
+
+    /* === Outline / Shadows === */
+    --border: rgba(255, 255, 255, 0.1);
+    --border-strong: rgba(255, 255, 255, 0.15);
+    --shadow: rgba(0, 0, 0, 0.5);
+}
+
+/* 🌗 Optional: auto dark mode via system preference */
+@media (prefers-color-scheme: dark) {
+    :root {
+        color-scheme: dark;
+    }
+}
+
+/* Darak mode Switch */
+.theme-switch {
+    height: 50px;
+    width: 50px;
+    padding: 0;
+    border: 0px solid var(--card);
+    border-radius: 50%;
+    background-color: var(--card);
+    display: flex;
+    justify-content: center;
+}
+
+.theme-switch svg {
+    fill: var(--text);
+}
+
+[data-theme="dark"] .theme-switch svg:first-child {
+    display: none;
+}
+
+[data-theme="dark"] .theme-switch svg:last-child {
+    display: block;
+}
+
+.theme-switch svg:first-child {
+    display: block;
+}
+
+.theme-switch svg:last-child {
+    display: none;
+}
+
+
+/*In built tag */
+body {
+    font-family: Inter, system-ui, Segoe UI, Roboto, "Helvetica Neue", Arial;
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+}
+
+header {
+    padding-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+h1 {
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+footer {
+    margin-top: 1rem;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+/*Created Tags*/
+.wrap {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 1rem;
+}
+
+.card {
+    background: var(--card);
+    padding: 0.9rem;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px var(--shadow);
+}
+
+@media (max-width: 880px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .card {
+        padding: 0.7rem;
+    }
+}
+
+.toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--bg);
+    color: var(--text);
+    padding: 12px 20px;
+    border-radius: 8px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    transform: translateY(20px);
+    font-size: 18px;
+    z-index: 9999;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Button CSS */
+.btn {
+    background-color: var(--blue);
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn:hover {
+    background-color: var(--blue-hover);
+}
+
+.expbtn {
+    align-items: center;
+    background-color: var(--green);
+    color: white;
+    border: none;
+    padding: 10px 10px;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.expbtn:hover {
+    background-color: var(--green-hover);
+}
+
+.addBtn {
+    background: var(--purple);
+    color: white;
+}
+
+.addBtn:hover {
+    background: var(--purple-hover);
+}
+
+.btn-save {
+    background: var(--drk_prp);
+}
+
+.btn-save:hover {
+    background: var(--purple-hover);
+}
+
+.btn-save:disabled {
+    background: var(--purple);
+    cursor: not-allowed;
+    opacity: 0.4;
+}
+
+.btn-clear {
+    background: var(--teal);
+    color: white;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--red);
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+/* calendar */
+.cal-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.6rem;
+}
+
+.cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+}
+
+.day-name {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+.date-cell {
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.date-cell:hover {
+    background: var(--blue-hover);
+}
+
+.day-name {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+.other-month {
+    opacity: 0.25;
+}
+
+.today {
+    outline: 2px solid var(--blue-hover);
+}
+
+.selected {
+    background: var(--accent);
+    color: white;
+}
+
+.cal-btn {
+    background-color: var(--teal-hover);
+    color: white;
+    border: none;
+    padding: 8px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.cal-btn:hover {
+    background-color: var(--blue-hover);
+}
+
+/*Selected Day Schedule*/
+.list-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--card);
+    padding: 8px 10px;
+    border-radius: 8px;
+    margin: 6px 0;
+    box-shadow: 0 1px 3px var(--border);
+    flex-wrap: wrap;
+}
+
+.list-row .left {
+    flex: 1 1 60%;
+    /* ✅ text block takes 60% of row width */
+    min-width: 150px;
+    word-wrap: break-word;
+}
+
+.list-row .right {
+    display: flex;
+    flex-wrap: wrap;
+    /* ✅ buttons wrap together neatly */
+    gap: 6px;
+    justify-content: flex-end;
+    flex: 1 1 50%;
+}
+
+.list-row .btn {
+    margin-left: 4px;
+    margin-right: 4px;
+    font-size: 12px;
+    transition: all 0.2s ease;
+}
+
+.list-row .active {
+    opacity: 1;
+    filter: brightness(1.1) contrast(1.1);
+    box-shadow: 0 0 0 2px var(--border-strong);
+}
+
+.list-row .inactive {
+    opacity: 0.6;
+    filter: saturate(0.6) brightness(0.9);
+    box-shadow: none;
+}
+
+.btn-att {
+    background: var(--green);
+}
+
+.btn-att:hover {
+    background: var(--green-hover);
+}
+
+.btn-miss {
+    background: var(--red);
+}
+
+
+
+/* Weekly Editor*/
+.weekday {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.weekday input[type="text"] {
+    color: var(--text);
+    background: var(--bg);
+    font-style: italic;
+    flex: 1;
+    padding: 6px;
+    border-radius: 6px;
+    border: 0px;
+}
+
+.small {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/*Statistics */
+.stats-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5 0;
+    border-bottom: 1px dashed var(--card);
+}
+
+/*Add Class pop Up*/
+.popup {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: var(--overlay);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    transition: opacity 0.25s ease;
+    opacity: 0;
+}
+
+.popup.show {
+    display: flex;
+    opacity: 1;
+}
+
+.popup .box {
+    background: var(--card);
+    padding: 1rem;
+    border-radius: 12px;
+    width: 300px
+}
+
+
+
+/*Clear Class pop ip */
+.clearClass {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--border);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.clearClass div {
+    background: var(--card);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: "300px";
+}
