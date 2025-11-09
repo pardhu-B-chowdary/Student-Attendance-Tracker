@@ -1,5 +1,7 @@
 # Student-Attendance-Tracker 
-This is a Web application to help student to track their attendance. The site is accsesable from [here](https://pardhu-b-chowdary.github.io/Student-Attendance-Tracker/).
+This is a Web application to help student to track their attendance. The site is accsesable from [here](https://pardhu-b-chowdary.github.io/Student-Attendance-Tracker/).  
+
+
 Student can add their Subjects and Schedule. which is displayed as both in timetable format and Statistics for the each subject along with overalls.
 
 
