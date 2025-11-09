@@ -1,3 +1,11 @@
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker
+    .register("./service-worker.js")
+    .then(() => console.log("Service Worker registered"))
+    .catch((err) => console.log("SW registration failed:", err));
+}
+
+
 // -- Utilities --
 const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday",];
 const pad = (n) => String(n).padStart(2, '0');
@@ -564,4 +572,5 @@ window.addEventListener("beforeunload", () => {
     localStorage.setItem(WEEK_KEY, JSON.stringify(weekly));
     localStorage.setItem(REC_KEY, JSON.stringify(records));
     localStorage.setItem(SUB_KEY, JSON.stringify(subjects));
+
 });
