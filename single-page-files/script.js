@@ -1,9 +1,20 @@
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker
-    .register("./service-worker.js")
-    .then(() => console.log("Service Worker registered"))
-    .catch((err) => console.log("SW registration failed:", err));
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').then((reg) => {
+        console.log('[App] Service Worker registered.');
+
+        reg.onupdatefound = () => {
+            const newWorker = reg.installing;
+            newWorker.onstatechange = () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                    console.log('[App] New version available. Updating...');
+                    window.location.reload(); // auto-refresh when new SW activates
+                }
+            };
+        };
+    }).catch(err => console.error('[App] SW registration failed:', err));
 }
+
+
 
 
 // -- Utilities --
@@ -158,7 +169,6 @@ function renderWeekEditor() {
             rm.textContent = "Remove";
             rm.className = "btn btn-clear";
             rm.onclick = () => {
-                delete subjects[weekly[day][idx].name];
                 weekly[day].splice(idx, 1);
                 saveSchedule();
                 renderWeekEditor();
@@ -186,8 +196,25 @@ function getDayScheduleForKey(key) { // return list of classes on that day of th
 
 function renderDay() { // renderes the schedule for the day
     selectedDatePretty.textContent = prettyKey(selectedDateKey);
-    const schedule = getDayScheduleForKey(selectedDateKey);
+    let schedule = getDayScheduleForKey(selectedDateKey);
     daySchedule.innerHTML = ""
+
+    //load any existing marks for that date
+    const rec = records[selectedDateKey] || [];
+
+    rec.forEach(r => {
+        if (!subjects.hasOwnProperty(r.name)) removeRecordsForDate(selectedDateKey, r);
+    });
+    const extraSubjects = rec
+        .filter(r => subjects[r.name]) // only if subject still exists
+        .filter(r => !schedule.some(s => s.name === r.name && (s.time || "") === (r.time || ""))) // not already scheduled
+        .map(r => ({
+            name: r.name,
+            time: r.time || "",
+        }));
+
+    // Merge old subjects with current schedule
+    schedule = [...schedule, ...extraSubjects];
 
     if (schedule.length === 0) {
         const d = document.createElement("div");
@@ -196,12 +223,7 @@ function renderDay() { // renderes the schedule for the day
         //daySchedule.innerHTML = `<div class="small>No classes scheduled for the day</div>`;
     }
 
-    //load any existing marks for that date
-    const rec = records[selectedDateKey] || [];
 
-    rec.forEach(r => {
-        if (!subjects.hasOwnProperty(r.name)) removeRecordsForDate(selectedDateKey, r);
-    });
     schedule.sort((a, b) => a.time.localeCompare(b.time));
 
     schedule.forEach((c, idx) => {
@@ -324,13 +346,61 @@ function renderStats() {
         const s = subMap[k];
         const row = document.createElement("div");
         row.className = "stats-row";
-        row.innerHTML = `<div>${s.name} <div class = 'small'>${s.time || ""}</div></div>
-            <div><strong>${s.total ? ((s.attended / s.total) * 100).toFixed(1) : 0}</strong>
+        // Subject info section
+        const infoDiv = document.createElement("div");
+        infoDiv.innerHTML = `${s.name}<div class='small'>${s.time || ""}</div>`;
+
+        // Stats section
+        const statsDiv = document.createElement("div");
+        statsDiv.innerHTML = `
+            <strong>${s.total ? ((s.attended / s.total) * 100).toFixed(1) : 0}%</strong>
             <div class="small">(${s.attended}/${s.total})</div>
-        </div>`;
+        `;
+
+        // 🗑️ Delete button
+        const delBtn = document.createElement("button");
+        delBtn.textContent = "🗑️";
+        delBtn.className = "btn btn-del";
+        delBtn.title = "Delete Subject";
+
+        delBtn.onclick = () => { delSubject(k) };
+
+        // Append all parts
+        infoDiv.appendChild(delBtn);
+        row.appendChild(infoDiv);
+        row.appendChild(statsDiv);
         statsEl.appendChild(row);
     });
 };
+
+//--- Delete Subject popup ---
+function delSubject(sub) {
+    console.log(sub);
+
+    // Custom confirmation popup
+    const confirmBox = document.createElement("div");
+    confirmBox.className = "clearClass";
+    confirmBox.innerHTML = `
+                <div class="confirm-content">
+                    <p>Are you sure you want to delete <strong>${sub.toUpperCase()}</strong>?</p>
+                    <div class="confirm-actions">
+                        <button class="btn btn-danger">Delete</button>
+                        <button class="btn btn-cancel">Cancel</button>
+                    </div>
+                </div>
+            `;
+    document.body.appendChild(confirmBox);
+
+    confirmBox.querySelector(".btn-cancel").onclick = () => confirmBox.remove();
+    confirmBox.querySelector(".btn-danger").onclick = () => {
+        delete subjects[sub];
+        saveSchedule();
+        confirmBox.remove();
+        renderStats();
+        renderDay();
+        showToast(`${sub.toUpperCase()} deleted`);
+    };
+}
 
 
 // -- Adding Class popup Attributes --
@@ -572,5 +642,4 @@ window.addEventListener("beforeunload", () => {
     localStorage.setItem(WEEK_KEY, JSON.stringify(weekly));
     localStorage.setItem(REC_KEY, JSON.stringify(records));
     localStorage.setItem(SUB_KEY, JSON.stringify(subjects));
-
 });
