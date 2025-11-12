@@ -1,5 +1,5 @@
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js').then((reg) => {
+    navigator.serviceWorker.register('/service-worker.js').then((reg) => {
         console.log('[App] Service Worker registered.');
 
         reg.onupdatefound = () => {
@@ -642,4 +642,5 @@ window.addEventListener("beforeunload", () => {
     localStorage.setItem(WEEK_KEY, JSON.stringify(weekly));
     localStorage.setItem(REC_KEY, JSON.stringify(records));
     localStorage.setItem(SUB_KEY, JSON.stringify(subjects));
+
 });
